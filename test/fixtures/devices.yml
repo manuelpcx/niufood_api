@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  restaurant: one
+  name: MyString
+  device_type: MyString
+  last_maintenance_at: 2024-12-05 15:19:08
+
+two:
+  restaurant: two
+  name: MyString
+  device_type: MyString
+  last_maintenance_at: 2024-12-05 15:19:08
