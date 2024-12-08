@@ -1,6 +1,11 @@
 class Api::DevicesController < ApplicationController
   before_action :set_device, only: [:update]
 
+  def index
+    restaurant = Restaurant.find(params[:restaurant_id])
+    render json: restaurant.devices
+  end    
+
   def create
     device = Device.new(device_params)
 
@@ -19,6 +24,11 @@ class Api::DevicesController < ApplicationController
     else
       render json: { errors: @device.errors.full_messages }, status: :unprocessable_entity
     end
+  end
+
+  def change_status
+    DeviceStatusUpdaterJob.perform_now(@device.id, params[:status])
+    render json: { message: "Cambio de estado encolado para el dispositivo #{@device.id}" }, status: :ok
   end
 
   private
