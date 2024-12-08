@@ -20,6 +20,14 @@ class Api::RestaurantsController < ApplicationController
     end
   end
 
+  def update
+    if @restaurant.update(restaurant_params)
+      render json: @restaurant
+    else
+      render json: { errors: @restaurant.errors.full_messages }, status: :unprocessable_entity
+    end
+  end
+
   def destroy
     @restaurant.destroy
     head :no_content
