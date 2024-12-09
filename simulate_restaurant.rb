@@ -64,7 +64,7 @@ def simulate_devices
         send_to_api(device_id, new_status)
       end
     end
-    sleep(rand(5..10))
+    sleep(rand(10..15))
   end
 end
 

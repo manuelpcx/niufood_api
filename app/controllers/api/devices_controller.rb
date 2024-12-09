@@ -27,8 +27,8 @@ class Api::DevicesController < ApplicationController
   end
 
   def change_status
-    DeviceStatusUpdaterJob.perform_now(@device.id, params[:status])
-    render json: { message: "Cambio de estado encolado para el dispositivo #{@device.id}" }, status: :ok
+    DeviceStatusUpdaterJob.perform_now(params[:device][:id], params[:device][:status])
+    render json: { message: "Cambio de estado encolado para el dispositivo #{params[:device][:id]}" }, status: :ok
   end
 
   private
