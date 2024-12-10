@@ -3,5 +3,5 @@ class Device < ApplicationRecord
   has_many :device_logs, dependent: :destroy
 
   validates :name, :device_type, :status, presence: true
-  validates :status, inclusion: { in: %w[operativo fallando mantenimiento] }
+  validates :status, inclusion: { in: %w[operativo warning Problemas] }
 end

@@ -3,7 +3,7 @@ require 'json'
 
 API_BASE_URL = 'http://localhost:3000/api/devices/change_status'
 RESTAURANT_ID = 1
-STATUS_OPTIONS = %w[operativo fallando mantenimiento]
+STATUS_OPTIONS = %w[operativo warning Problemas]
 
 def fetch_devices
   uri = URI("http://localhost:3000/api/restaurants/#{RESTAURANT_ID}/devices")

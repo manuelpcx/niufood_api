@@ -15,10 +15,10 @@ class DeviceStatusUpdaterJob < ApplicationJob
   def update_status_restaurant restaurant
     devices_status = restaurant.devices.pluck(:status)
 
-    new_status = if devices_status.include?("fallando")
-                  'fallando'
-                 elsif devices_status.include?('mantenimiento')
-                  'mantenimiento'
+    new_status = if devices_status.include?("warning")
+                  'warning'
+                 elsif devices_status.include?('Problemas')
+                  'Problemas'
                  else
                   'operativo'
                  end

@@ -4,7 +4,7 @@
     El propósito de este backend es gestionar los siguientes conceptos:
 
     Restaurantes: Información básica sobre restaurantes.
-    Dispositivos: Representan recursos vinculados a cada restaurante, con estados como operativo, fallando o mantenimiento.
+    Dispositivos: Representan recursos vinculados a cada restaurante, con estados como operativo, warning o Problemas.
     WebSocket en tiempo real: Sincronización automática entre la base de datos y el frontend.
     Utiliza Sidekiq + Redis para realizar tareas en segundo plano, como actualizaciones periódicas.
 
