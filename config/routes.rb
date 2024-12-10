@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount ActionCable.server => '/cable'
   namespace :api do
     resources :devices, only: [:create, :update] do
       collection do

@@ -19,7 +19,6 @@ end
 
 def random_status(current_status)
   new_status = STATUS_OPTIONS.sample
-  new_status == current_status ? random_status(current_status) : new_status
 end
 
 def send_to_api(device_id, new_status)

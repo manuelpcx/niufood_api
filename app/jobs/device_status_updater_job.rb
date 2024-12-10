@@ -5,9 +5,9 @@ class DeviceStatusUpdaterJob < ApplicationJob
     device = Device.find(device_id)
     device.update!(status: new_status)
     DeviceLog.create!(device: device, change: "Status updated to #{new_status}")
-
     restaurant = device.restaurant
     update_status_restaurant(restaurant)
+    ActionCable.server.broadcast("device_updates", device.as_json)
   end
 
   private
