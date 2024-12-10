@@ -2,8 +2,21 @@ class Api::RestaurantsController < ApplicationController
   before_action :set_restaurant, only: [:show, :update, :destroy]
 
   def index
-    @restaurants = Restaurant.all
-    render json: @restaurants
+    @restaurants = Restaurant.includes(:devices)
+    render json: @restaurants.map { |restaurant|
+      {
+        id: restaurant.id,
+        name: restaurant.name,
+        status: restaurant.status,
+        devices: restaurant.devices.map { |device|
+          {
+            id: device.id,
+            name: device.name,
+            status: device.status
+          }
+        }
+      }
+    }
   end
 
   def show

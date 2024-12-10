@@ -62,3 +62,5 @@ end
 gem 'sidekiq'
 gem 'redis'
 gem 'rswag'
+gem 'rack-cors'
+
