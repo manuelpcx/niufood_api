@@ -1,24 +1,37 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+1. Descripción del Proyecto
+    El propósito de este backend es gestionar los siguientes conceptos:
 
-Things you may want to cover:
+    Restaurantes: Información básica sobre restaurantes.
+    Dispositivos: Representan recursos vinculados a cada restaurante, con estados como operativo, fallando o mantenimiento.
+    WebSocket en tiempo real: Sincronización automática entre la base de datos y el frontend.
+    Utiliza Sidekiq + Redis para realizar tareas en segundo plano, como actualizaciones periódicas.
 
-* Ruby version
+2. Requisitos Previo
+    Antes de comenzar, asegúrate de tener instalados estos requisitos:
 
-* System dependencies
+    Ruby 3.0.0 o superior
+    Rails 7.x.x
+    PostgreSQL (base de datos)
+    Redis (para Sidekiq y ActionCable)
+    Node.js (para dependencias de Rails)
 
-* Configuration
+3. Instalación
 
-* Database creation
+    Clona el repositorio
+    https://github.com/manuelpcx/niufood_api.git
 
-* Database initialization
+    Instala las gemas
+        bundle install
 
-* How to run the test suite
+    crea la base de datos
+        rails db:create
+        rails db:migrate
 
-* Services (job queues, cache servers, search engines, etc.)
+    Configuración:
 
-* Deployment instructions
-
-* ...
+    Iniciar redis: 
+        redis-server
+    Iniciar rails:
+        rails s
