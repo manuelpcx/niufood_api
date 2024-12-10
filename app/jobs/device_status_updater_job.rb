@@ -3,7 +3,7 @@ class DeviceStatusUpdaterJob < ApplicationJob
 
   def perform(device_id, new_status)
     device = Device.find(device_id)
-    device.update!(status: new_status)
+    device.update!(status: new_status, last_maintenance_at: DateTime.current)
     DeviceLog.create!(device: device, change: "Status updated to #{new_status}")
     restaurant = device.restaurant
     update_status_restaurant(restaurant)
