@@ -1,69 +1,71 @@
-# syntax = docker/dockerfile:1
+# Utilizamos Ubuntu 20.04 como base
+FROM ubuntu:20.04
 
-# This Dockerfile is designed for production, not development. Use with Kamal or build'n'run by hand:
-# docker build -t my-app .
-# docker run -d -p 80:80 -p 443:443 --name my-app -e RAILS_MASTER_KEY=<value from config/master.key> my-app
+# Configuración de locales, zona horaria y actualización de paquetes
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Santiago
 
-# Make sure RUBY_VERSION matches the Ruby version in .ruby-version
-ARG RUBY_VERSION=3.1.6
-FROM docker.io/library/ruby:$RUBY_VERSION-slim AS base
+RUN apt-get update -y && apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    gnupg \
+    git \
+    libpq-dev \
+    nodejs \
+    npm \
+    software-properties-common \
+    libssl-dev \
+    zlib1g-dev \
+    libreadline-dev \
+    libyaml-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    libcurl4-openssl-dev \
+    libffi-dev \
+    wget \
+    sudo && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Rails app lives here
-WORKDIR /rails
+# Agregar repositorio oficial de PostgreSQL y configurar cliente
+RUN curl -sSL https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    echo "deb http://apt.postgresql.org/pub/repos/apt focal-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    apt-get update -y && \
+    apt-get install -y postgresql-client-12 && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# Install base packages
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libjemalloc2 libvips postgresql-client && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Configuración de Ruby
+ENV RUBY_VERSION=3.1.6
+RUN wget https://cache.ruby-lang.org/pub/ruby/3.1/ruby-$RUBY_VERSION.tar.gz && \
+    tar -xzvf ruby-$RUBY_VERSION.tar.gz && \
+    cd ruby-$RUBY_VERSION && \
+    ./configure && \
+    make && \
+    make install && \
+    cd .. && \
+    rm -rf ruby-$RUBY_VERSION*
 
-# Set production environment
-ENV RAILS_ENV="production" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle" \
-    BUNDLE_WITHOUT="development"
+# Configuración de Rails
+ENV RAILS_VERSION=7.2.2
+RUN gem install rails -v $RAILS_VERSION
 
-# Throw-away build stage to reduce size of final image
-FROM base AS build
+# Instalación de Bundler
+RUN gem install bundler
 
-# Install packages needed to build gems
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libpq-dev pkg-config && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+# Configuración del directorio de la aplicación
+WORKDIR /app
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
-    bundle exec bootsnap precompile --gemfile
-
-# Copy application code
+# Copiamos el código fuente de la aplicación al contenedor
 COPY . .
 
-# Precompile bootsnap code for faster boot times
-RUN bundle exec bootsnap precompile app/ lib/
+# Instalación de las dependencias de la aplicación
+RUN bundle install
 
-# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
+# Precompilación de los assets (si es necesario)
+RUN rails assets:precompile || true
 
-
-
-
-# Final stage for app image
-FROM base
-
-# Copy built artifacts: gems, application
-COPY --from=build "${BUNDLE_PATH}" "${BUNDLE_PATH}"
-COPY --from=build /rails /rails
-
-# Run and own only the runtime files as a non-root user for security
-RUN groupadd --system --gid 1000 rails && \
-    useradd rails --uid 1000 --gid 1000 --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
-USER 1000:1000
-
-# Entrypoint prepares the database.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
-
-# Start the server by default, this can be overwritten at runtime
+# Exponemos el puerto 3000 para el servidor Rails
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+
+# Comando por defecto para iniciar el servidor
+CMD ["rails", "server", "-b", "0.0.0.0"]

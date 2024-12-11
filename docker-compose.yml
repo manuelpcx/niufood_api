@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://postgres:simon070913@db:5432/niufood_api
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+  db:
+    image: postgres:10
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: simon070913
+      POSTGRES_DB: niufood_api
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:latest
+    ports:
+      - "6379:6379"

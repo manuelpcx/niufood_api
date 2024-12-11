@@ -1,6 +1,0 @@
-Funcionamiento del script:
-El script esta pensado para realizar peticiones a la API, y asi recibir los dispositivos del restaurante, para luego
-enviar el estatus de cada dispositivo a la API.
-
-La interacción con la API:
-el script interactua mediante peticiones HTTP, las cuales se ejecutan periodicamente en un tiempo determinado de 10 a 15 segundos

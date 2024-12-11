@@ -9,9 +9,19 @@
 #   end
 
 restaurant = Restaurant.create(name: "niu sushi", city: "santiago", status: "operativo")
-device = Device.create(name: "POS de venta", device_type: "POS", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
-DeviceLog.create(device: device.id, change: "Device created")
-device = Device.create(name: "Impresora de cocina", device_type: "Impresora", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
-DeviceLog.create(device: device.id, change: "Device created")
-device = Device.create(name: "Servidor de red", device_type: "Red", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
-DeviceLog.create(device: device.id, change: "Device created")
+device1 = Device.create(name: "POS de venta", device_type: "POS", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+DeviceLog.create(device: device1, change: "Device created")
+device2 = Device.create(name: "Impresora de cocina", device_type: "Impresora", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+DeviceLog.create(device: device2, change: "Device created")
+device3 = Device.create(name: "Servidor de red", device_type: "Red", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+DeviceLog.create(device: device3, change: "Device created")
+
+3.times do |i|
+    restaurant = Restaurant.create(name: "niu sushi #{i}", city: "santiago", status: "operativo")
+    device1 = Device.create(name: "POS de venta #{i}", device_type: "POS", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+    DeviceLog.create(device: device1, change: "Device created")
+    device2 = Device.create(name: "Impresora de cocina #{i}", device_type: "Impresora", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+    DeviceLog.create(device: device2, change: "Device created")
+    device3 = Device.create(name: "Servidor de red #{i}", device_type: "Red", last_maintenance_at: DateTime.current, status: "operativo", restaurant_id: restaurant.id)
+    DeviceLog.create(device: device3, change: "Device created")
+end
