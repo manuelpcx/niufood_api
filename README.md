@@ -33,4 +33,4 @@
     - rails db:migrate
     - rails db:seed
     luego que tengamos el front levantados, proseguimos con el ultimo comando para que empiece la magia
-    - ruby simulta_restaurant.rb
+    - ruby simulate_restaurant.rb
